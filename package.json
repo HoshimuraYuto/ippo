@@ -28,6 +28,7 @@
     "ippo": "index.js"
   },
   "files": [
+    "config",
     "dist",
     "index.js"
   ],
