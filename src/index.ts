@@ -6,11 +6,12 @@ import prompts from "prompts";
 
 import { languages, frameworks, stylesheets } from "./config.ts";
 import {
-  resolvePath,
+  resolvePathFromCwd,
   isDirectoryExist,
   isDirectoryNotEmpty,
   copyDirectoryContents,
   onCancel,
+  resolvePathFromProgramDirectory,
 } from "./utils.ts";
 
 type PromptResult<T> = { value: T };
@@ -97,12 +98,18 @@ try {
 
   if (!confirm) onCancel();
 
-  const projectRootDirectory = resolvePath(projectName);
+  const projectRootDirectory = resolvePathFromCwd(projectName);
+
   fs.mkdirSync(projectRootDirectory);
-  copyDirectoryContents(resolvePath("config/base"), projectRootDirectory);
+  copyDirectoryContents(
+    resolvePathFromProgramDirectory("../config/base"),
+    projectRootDirectory,
+  );
 
   copyDirectoryContents(
-    resolvePath(`config/${framework}-${language}-${stylesheet}`),
+    resolvePathFromProgramDirectory(
+      `../config/${framework}-${language}-${stylesheet}`,
+    ),
     projectRootDirectory,
   );
 } catch (error) {

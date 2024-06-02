@@ -2,18 +2,28 @@
 
 import fs from "node:fs";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 
 import { red } from "kolorist";
 
-const cwd = process.cwd();
+const filename = fileURLToPath(import.meta.url);
+const dirname = path.dirname(filename);
 
 /**
- * Resolves the absolute path of a relative path.
+ * Resolves the absolute path of a relative path based on the current working directory.
  * @param relativePath - The relative path to resolve.
  * @returns The absolute path.
  */
-export const resolvePath = (relativePath: string): string =>
-  path.resolve(cwd, relativePath);
+export const resolvePathFromCwd = (relativePath: string): string =>
+  path.resolve(process.cwd(), relativePath);
+
+/**
+ * Resolves the absolute path of a relative path based on the current program's directory.
+ * @param relativePath - The relative path to resolve.
+ * @returns The absolute path.
+ */
+export const resolvePathFromProgramDirectory = (relativePath: string): string =>
+  path.resolve(dirname, relativePath);
 
 /**
  * Checks if a directory exists.
