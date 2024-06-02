@@ -1,0 +1,15 @@
+ls:
+  src:
+    .dir: kebab-case
+    .js: camelCase
+    .ts: camelCase
+    .d.ts: camelCase
+    .css: kebab-case
+    .scss: kebab-case
+    components:
+      .js: PascalCase
+      .ts: PascalCase
+
+ignore:
+  - .git
+  - node_modules
