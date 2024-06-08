@@ -1,14 +1,14 @@
 import pluginJs from "@eslint/js";
-import typescriptEslintPlugin from "@typescript-eslint/eslint-plugin";
-import typescriptEslintParser from "@typescript-eslint/parser";
 import eslintConfigPrettier from "eslint-config-prettier";
 import checkFile from "eslint-plugin-check-file";
-import importPlugin from "eslint-plugin-import";
+import importPlugin from "eslint-plugin-import-x";
 import jsdocPlugin from "eslint-plugin-jsdoc";
+import promisePlugin from "eslint-plugin-promise";
 import sonarjsPlugin from "eslint-plugin-sonarjs";
 import unicornPlugin from "eslint-plugin-unicorn";
 import unusedImportsPlugin from "eslint-plugin-unused-imports";
 import globals from "globals";
+import tsEslint from "typescript-eslint";
 
 const baseConfig = {
   languageOptions: {
@@ -66,28 +66,6 @@ const typescriptFormatConfig = {
   },
 };
 
-const typescriptConfig = {
-  files: ["**/*.ts"],
-  languageOptions: {
-    parser: typescriptEslintParser,
-    parserOptions: {
-      project: "tsconfig.json",
-    },
-  },
-  plugins: {
-    "@typescript-eslint": typescriptEslintPlugin,
-  },
-  rules: {
-    ...typescriptEslintPlugin.configs["strict-type-checked"].rules,
-    "@typescript-eslint/explicit-function-return-type": "error",
-  },
-  settings: {
-    "import/parsers": {
-      "@typescript-eslint/parser": [".ts", ".tsx"],
-    },
-  },
-};
-
 const jsdocConfig = {
   plugins: {
     jsdoc: jsdocPlugin,
@@ -125,11 +103,11 @@ const unicornConfig = {
 
 const importConfig = {
   plugins: {
-    import: importPlugin,
+    "import-x": importPlugin,
     "unused-imports": unusedImportsPlugin,
   },
   rules: {
-    "import/order": [
+    "import-x/order": [
       "error",
       {
         alphabetize: { caseInsensitive: true, order: "asc" },
@@ -150,11 +128,18 @@ const importConfig = {
     "unused-imports/no-unused-imports": "error",
   },
   settings: {
-    "import/resolver": {
+    "import-x/resolver": {
       node: true,
       typescript: true,
     },
   },
+};
+
+const promiseConfig = {
+  plugins: {
+    promise: promisePlugin,
+  },
+  rules: promisePlugin.configs["recommended"].rules,
 };
 
 const coreRulesConfig = {
@@ -176,15 +161,16 @@ const coreRulesConfig = {
 
 export default [
   pluginJs.configs.recommended,
+  ...tsEslint.configs.recommended,
   baseConfig,
   namingConventionConfig,
   javascriptFormatConfig,
   typescriptFormatConfig,
-  typescriptConfig,
   jsdocConfig,
   sonarjsConfig,
   unicornConfig,
   importConfig,
+  promiseConfig,
   coreRulesConfig,
   eslintConfigPrettier,
 ];
